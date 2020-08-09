@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ProductRepo {
 
-    public void save(Product user);
-    public void update(Product user);
+    public int  save(Product user);
+    public int  update(Product user);
     public Product getUser(int id);
-    public void delete(int id);
+    public int  delete(int id);
     public List<Product> list();
 }
