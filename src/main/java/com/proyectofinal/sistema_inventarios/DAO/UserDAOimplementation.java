@@ -67,7 +67,7 @@ public class UserDAOimplementation implements UserRepo{
 
         String sql = "DELETE FROM Users WHERE cedula =" + id;
         return jdbcTemplate.update(sql);
-
+        //File modified by SebasZ
     }
 
     @Override
