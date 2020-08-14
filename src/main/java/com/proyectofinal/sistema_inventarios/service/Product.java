@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
-    private int id;
+    private int idProducts;
     private String name;
     private double quantity;
     private String description;

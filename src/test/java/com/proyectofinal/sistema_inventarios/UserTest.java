@@ -30,7 +30,7 @@ public class UserTest {
     @Test
     public void testSaveUser() throws SQLException {
         try {
-            Users users = new Users(1234567893,"Sebas", "Zumbado","60024846", FormaPago.Contado);
+            Users users = new Users(1234567891,"Sebas", "Zumbado","60024846", FormaPago.Contado);
             int result = userRepo.save(users);
 
             assertTrue(result >= 0);
@@ -44,7 +44,7 @@ public class UserTest {
     }
     @Test
     public void testGetUser(){
-        Users users = userRepo.getUser(1234567890 );
+        Users users = userRepo.getUser(1234567891 );
         if(users !=null)System.out.println(users.toString());
     }
 

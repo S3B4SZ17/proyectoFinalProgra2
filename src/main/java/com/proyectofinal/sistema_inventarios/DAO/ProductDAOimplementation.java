@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -25,35 +26,35 @@ public class ProductDAOimplementation implements ProductRepo {
 
     @Override
     public int save(Product product) {
-        String sql = "Insert into Products (id,name,quantity, description,datePurchase)"
+        String sql = "Insert into Products (idProducts,name,quantity, description,datePurchase)"
                 + " values (?,?,?,?,?)";
-        return jdbcTemplate.update(sql, product.getId(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase());
+        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase());
 
     }
 
     @Override
     public int update(Product product, int id) {
-        String sql = "UPDATE Products SET id = ?, name = ?, quantity = ?, phone = ?, description = ?, datePurchase = ? WHERE id = ?";
-        return jdbcTemplate.update(sql, product.getId(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase(), id);
+        String sql = "UPDATE Products SET idProducts = ?, name = ?, quantity = ?, phone = ?, description = ?, datePurchase = ? WHERE idProducts = ?";
+        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase(), id);
 
     }
 
     @Override
     public Product getUser(int id) {
-        String sql = "SELECT * FROM Products WHERE id =" + id;
+        String sql = "SELECT * FROM Products WHERE idProducts =" + id;
 
         ResultSetExtractor<Product> extractor = new ResultSetExtractor<Product>() {
             @Override
 //this method extracts via spring the data from the table contact and set it in the extractor variable
             public Product extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
+                    int idProducts = resultSet.getInt("idProducts");
                     String name = resultSet.getString("name");
                     double quantity = resultSet.getDouble("quantity");
                     String description = resultSet.getString("description");
                     Date datePurchase = resultSet.getDate("datePurchase");
 
-                    return new Product(id, name, quantity, description, datePurchase);
+                    return new Product(idProducts, name, quantity, description, datePurchase);
                 }
                 return null;
             }
@@ -64,11 +65,28 @@ public class ProductDAOimplementation implements ProductRepo {
 
     @Override
     public int delete(int id) {
-        return 0;
+
+        String sql = "DELETE FROM Products WHERE idProducts =" + id;
+        return jdbcTemplate.update(sql);
     }
 
     @Override
     public List<Product> list() {
-        return null;
+        String sql = "SELECT * FROM Products";
+        RowMapper<Product> rowMapper = new RowMapper<Product>() {//Row Mapper class, it returns a List of the Class that we specified
+            @Override
+            public Product mapRow(ResultSet resultSet, int i) throws SQLException {
+
+                int idProducts = resultSet.getInt("idProducts");
+                String name = resultSet.getString("name");
+                double quantity = resultSet.getDouble("quantity");
+                String description = resultSet.getString("description");
+                Date datePurchase = resultSet.getDate("datePurchase");
+
+                return new Product(idProducts, name, quantity, description, datePurchase);
+            }
+
+        };
+        return jdbcTemplate.query(sql, rowMapper);
     }
 }
