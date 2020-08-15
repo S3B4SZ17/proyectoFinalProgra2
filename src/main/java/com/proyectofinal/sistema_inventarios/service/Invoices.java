@@ -11,8 +11,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Invoices {
-    private ArrayList<Product> products = new ArrayList<Product>();
-    private ArrayList<Users> users = new ArrayList<Users>();
+    private int idFactura;
+    private Users users = new Users();
+    private Product products = new Product();
     private Date invoiceDate;
     private double total;
 

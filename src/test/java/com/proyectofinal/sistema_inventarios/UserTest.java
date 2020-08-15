@@ -30,7 +30,7 @@ public class UserTest {
     @Test
     public void testSaveUser() throws SQLException {
         try {
-            Users users = new Users(1234567891,"Sebas", "Zumbado","60024846", FormaPago.Contado);
+            Users users = new Users(1234567891,"Sebas", "Zumbado","60024846", FormaPago.Contado,"Sebas111", "sebas@example.com");
             int result = userRepo.save(users);
 
             assertTrue(result >= 0);
@@ -72,7 +72,7 @@ public class UserTest {
     @Test
     public void testUpdateUser() throws SQLException {
         try {
-            Users users = new Users(1234567893,"Sebas", "Zumbado","60024846", FormaPago.Contado);
+            Users users = new Users(1234567893,"Sebas", "Zumbado","60024846", FormaPago.Contado,"Sebas111", "sebas@example.com");
             int result = userRepo.update(users, 1234567891);
 
             assertTrue(result >= 0);

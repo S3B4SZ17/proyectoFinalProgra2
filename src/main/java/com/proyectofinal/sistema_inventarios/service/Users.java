@@ -13,6 +13,8 @@ public class Users {
     private String lastName;
     private String phone;
     private FormaPago tipoPago;
+    private String contrasena;
+    private String email;
 
 
 }

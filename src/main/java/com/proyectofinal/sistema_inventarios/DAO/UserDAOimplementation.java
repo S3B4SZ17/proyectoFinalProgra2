@@ -26,16 +26,16 @@ public class UserDAOimplementation implements UserRepo{
 
     @Override
     public int save(Users users) {
-        String sql = "Insert into Users (cedula,name,lastname, phone,tipoPago)"
-                + " values (?,?,?,?,?)";
-        return jdbcTemplate.update(sql,users.getCedula(), users.getName(), users.getLastName(), users.getPhone(), users.getTipoPago().toString());
+        String sql = "Insert into Users (cedula,name,lastname, phone,tipopago,contrasena, email)"
+                + " values (?,?,?,?,?,?,?)";
+        return jdbcTemplate.update(sql,users.getCedula(), users.getName(), users.getLastName(), users.getPhone(), users.getTipoPago().toString(),users.getContrasena(), users.getEmail());
 
     }
 
     @Override
     public int update(Users users, int cedula) {
-        String sql = "UPDATE Users SET cedula = ?, name = ?, lastname = ?, phone = ?, tipoPago = ? WHERE cedula = ?";
-        return jdbcTemplate.update(sql, users.getCedula(), users.getName(), users.getLastName(), users.getPhone(), users.getTipoPago().toString(), cedula);
+        String sql = "UPDATE Users SET cedula = ?, name = ?, lastname = ?, phone = ?, tipoPago = ?,contrasena = ?, email = ? WHERE cedula = ?";
+        return jdbcTemplate.update(sql, users.getCedula(), users.getName(), users.getLastName(), users.getPhone(), users.getTipoPago().toString(),users.getContrasena(), users.getEmail(), cedula);
 
     }
 
@@ -53,8 +53,10 @@ public class UserDAOimplementation implements UserRepo{
                     String lastname = resultSet.getString("lastname");
                     String phone = resultSet.getString("phone");
                     String tipoPago = resultSet.getString("tipoPago");
+                    String contrasena = resultSet.getString("contrasena");
+                    String email = resultSet.getString("email");
 
-                    return new Users(cedula, name, lastname, phone, FormaPago.valueOf(tipoPago));
+                    return new Users(cedula, name, lastname, phone, FormaPago.valueOf(tipoPago),contrasena, email);
                 }
                 return null;
             }
@@ -83,8 +85,10 @@ public class UserDAOimplementation implements UserRepo{
                 String lastname = resultSet.getString("lastname");
                 String phone = resultSet.getString("phone");
                 String tipoPago = resultSet.getString("tipoPago");
+                String contrasena = resultSet.getString("contrasena");
+                String email = resultSet.getString("email");
 
-                return new Users(cedula, name, lastname, phone, FormaPago.valueOf(tipoPago));
+                return new Users(cedula, name, lastname, phone, FormaPago.valueOf(tipoPago),contrasena, email);
             }
 
         };

@@ -34,13 +34,13 @@ public class ProductDAOimplementation implements ProductRepo {
 
     @Override
     public int update(Product product, int id) {
-        String sql = "UPDATE Products SET idProducts = ?, name = ?, quantity = ?, phone = ?, description = ?, datePurchase = ? WHERE idProducts = ?";
+        String sql = "UPDATE Products SET idProducts = ?, name = ?, quantity = ?, description = ?, datePurchase = ? WHERE idProducts = ?";
         return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase(), id);
 
     }
 
     @Override
-    public Product getUser(int id) {
+    public Product getProduct(int id) {
         String sql = "SELECT * FROM Products WHERE idProducts =" + id;
 
         ResultSetExtractor<Product> extractor = new ResultSetExtractor<Product>() {
