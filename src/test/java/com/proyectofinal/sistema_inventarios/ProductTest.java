@@ -31,7 +31,7 @@ public class ProductTest {
     @Test
     public void testSaveProduct() throws SQLException {
         try {
-            Product product = new Product(1002,"Arroz", 40,"Arroz entero", date);
+            Product product = new Product(1003,"Cereal", 9,"Cereal tostado", date);
             int result = productRepo.save(product);
 
             assertTrue(result >= 0);

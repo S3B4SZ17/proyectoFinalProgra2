@@ -1,20 +1,29 @@
 package com.proyectofinal.sistema_inventarios.DAO;
 
 import com.proyectofinal.sistema_inventarios.repository.SalesRepo;
-import com.proyectofinal.sistema_inventarios.service.Product;
+import com.proyectofinal.sistema_inventarios.service.MailParts;
+import com.proyectofinal.sistema_inventarios.service.MailService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@Service
+@AllArgsConstructor
+@NoArgsConstructor
+@Transactional
 public class SalesImplementation implements SalesRepo {
-    @Autowired
+
+    private MailService mailService = new MailService();
     private JdbcTemplate jdbcTemplate;
+
 
     public SalesImplementation(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -22,25 +31,26 @@ public class SalesImplementation implements SalesRepo {
 
     @Override
     public int validarExistencias(int id) {
-        String sql = "SELECT quantity FROM Products WHERE idProducts =" + id;
-
-        ResultSetExtractor<Integer> extractor = new ResultSetExtractor<Integer>() {
-            @Override
-//this method extracts via spring the data from the table contact and set it in the extractor variable
-            public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+        String sql = "SELECT quantity,name FROM Products WHERE idProducts =" + id;
+        AtomicInteger result = new AtomicInteger();
+        ResultSetExtractor<Integer> extractor = (ResultSet resultSet) ->  {
                 if (resultSet.next()) {
                     double quantity = resultSet.getDouble("quantity");
+                    String product = resultSet.getString("name");
                     if (quantity>0){
                         System.out.println("mas que 1");
-                        return 1;
+                        System.out.println(product);
+                        result.set(1);
+                        if(quantity<10){
+                            enviarAlertaMinimodeStock(product,quantity);
+                        }
                     }
                 }
                 return null;
-            }
         };
 
         jdbcTemplate.query(sql, extractor);
-        return 0;
+        return result.intValue();
 
     }
 
@@ -48,4 +58,15 @@ public class SalesImplementation implements SalesRepo {
     public double devuelveTotal() {
         return 0;
     }
+
+    @Override
+    public void enviarAlertaMinimodeStock(String product, double quantity) {
+        String SubjectEmail = "Alerta de Minimo Stock ";
+        String BodyEmail = "Le recomendamos compar mas articulos de :" +product+"\n"+
+                "Solamente se tienen "+quantity+ " en stock";
+        mailService.sendEmail(new MailParts(SubjectEmail,"sebas@test.com",BodyEmail));
+
+    }
+
+
 }
