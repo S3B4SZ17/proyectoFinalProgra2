@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -26,16 +27,16 @@ public class ProductDAOimplementation implements ProductRepo {
 
     @Override
     public int save(Product product) {
-        String sql = "Insert into Products (idProducts,name,quantity, description,datePurchase)"
-                + " values (?,?,?,?,?)";
-        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase());
+        String sql = "Insert into Products (idProducts,name,quantity,price, description,datePurchase)"
+                + " values (?,?,?,?,?,?)";
+        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(),product.getPrice(), product.getDescription(), product.getDateOfPurchase());
 
     }
 
     @Override
     public int update(Product product, int id) {
-        String sql = "UPDATE Products SET idProducts = ?, name = ?, quantity = ?, description = ?, datePurchase = ? WHERE idProducts = ?";
-        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(), product.getDescription(), product.getDateOfPurchase(), id);
+        String sql = "UPDATE Products SET idProducts = ?, name = ?, quantity = ?, price = ?,description = ?, datePurchase = ? WHERE idProducts = ?";
+        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(), product.getPrice(), product.getDescription(), product.getDateOfPurchase(), id);
 
     }
 
@@ -51,10 +52,11 @@ public class ProductDAOimplementation implements ProductRepo {
                     int idProducts = resultSet.getInt("idProducts");
                     String name = resultSet.getString("name");
                     double quantity = resultSet.getDouble("quantity");
+                    double price = resultSet.getDouble("price");
                     String description = resultSet.getString("description");
-                    Date datePurchase = resultSet.getDate("datePurchase");
+                    LocalDateTime datePurchase = resultSet.getTimestamp("datePurchase").toLocalDateTime();
 
-                    return new Product(idProducts, name, quantity, description, datePurchase);
+                    return new Product(idProducts, name, quantity,price, description, datePurchase);
                 }
                 return null;
             }
@@ -80,10 +82,11 @@ public class ProductDAOimplementation implements ProductRepo {
                 int idProducts = resultSet.getInt("idProducts");
                 String name = resultSet.getString("name");
                 double quantity = resultSet.getDouble("quantity");
+                double price = resultSet.getDouble("price");
                 String description = resultSet.getString("description");
-                Date datePurchase = resultSet.getDate("datePurchase");
+                LocalDateTime datePurchase = resultSet.getTimestamp("datePurchase").toLocalDateTime();
 
-                return new Product(idProducts, name, quantity, description, datePurchase);
+                return new Product(idProducts, name, quantity,price, description, datePurchase);
             }
 
         };

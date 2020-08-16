@@ -24,13 +24,14 @@ public class UserTest {
 
     @BeforeEach
     public void setConnectionDataBase(){
+
         userRepo = new UserDAOimplementation(springJdbcConfig.mysqlDataSource());
     }
 
     @Test
     public void testSaveUser() throws SQLException {
         try {
-            Users users = new Users(1234567891,"Sebas", "Zumbado","60024846", FormaPago.Contado,"Sebas111", "sebas@example.com");
+            Users users = new Users(1234567892,"Mark", "Brown","61025856", FormaPago.Credito,"Mark111", "mark@example.com");
             int result = userRepo.save(users);
 
             assertTrue(result >= 0);
@@ -43,9 +44,11 @@ public class UserTest {
 
     }
     @Test
-    public void testGetUser(){
+    public Users testGetUser(){
         Users users = userRepo.getUser(1234567891 );
+        System.out.println(users.getCedula());
         if(users !=null)System.out.println(users.toString());
+        return users;
     }
 
     @Test
@@ -60,7 +63,7 @@ public class UserTest {
 
     @Test
     public void testDelete(){
-        userRepo.delete(1234567893);
+        userRepo.delete(1234567891);
         List<Users> users = userRepo.list();
         for(Users users1 : users){
             if(users !=null)System.out.println(users1.toString());

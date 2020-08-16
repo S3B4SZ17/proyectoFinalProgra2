@@ -12,13 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProductTest {
-    Date date = new Date();
+    LocalDateTime date = LocalDateTime.now();
     @Autowired
     SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
     ProductRepo productRepo;
@@ -31,7 +32,7 @@ public class ProductTest {
     @Test
     public void testSaveProduct() throws SQLException {
         try {
-            Product product = new Product(1003,"Cereal", 9,"Cereal tostado", date);
+            Product product = new Product(1002,"Cereal", 150,300,"Cereal dulce", LocalDateTime.now());
             int result = productRepo.save(product);
 
             assertTrue(result >= 0);
@@ -73,7 +74,7 @@ public class ProductTest {
     @Test
     public void testUpdateProduct() throws SQLException {
         try {
-            Product product = new Product(1002,"Frijoles", 50,"Frijoles Rojos", date);
+            Product product = new Product(1002,"Frijoles", 50,1100,"Frijoles Rojos", LocalDateTime.now());
             int result = productRepo.update(product, 1002);
 
             assertTrue(result >= 0);

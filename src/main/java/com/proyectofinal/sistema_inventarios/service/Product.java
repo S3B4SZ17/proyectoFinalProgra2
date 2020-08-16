@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Data
 @AllArgsConstructor
@@ -13,9 +13,10 @@ import java.util.Date;
 public class Product {
     private int idProducts;
     private String name;
+    private double price;
     private double quantity;
     private String description;
-    private Date dateOfPurchase;
+    private LocalDateTime dateOfPurchase;
 
 
 

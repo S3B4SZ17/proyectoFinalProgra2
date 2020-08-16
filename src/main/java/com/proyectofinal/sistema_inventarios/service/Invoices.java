@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Invoices {
     private int idFactura;
-    private Users users = new Users();
-    private Product products = new Product();
-    private Date invoiceDate;
+    private Users users;
+    private Product[] products;
+    private LocalDateTime invoiceDate;
     private double total;
 
 

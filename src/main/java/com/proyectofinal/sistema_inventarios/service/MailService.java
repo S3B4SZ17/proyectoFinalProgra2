@@ -12,11 +12,11 @@ import java.util.Properties;
 
 @Service
 @AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
 public class MailService {
-    private String username = "33ed01720c411a";
-    private String password = "af46153c1bb0e4";
+    private final String username = "33ed01720c411a";
+    private final String password = "af46153c1bb0e4";
+
 
     private Properties getProperties() {
         Properties props = new Properties();
@@ -51,7 +51,7 @@ public class MailService {
         Message message = new MimeMessage(session);
         try {
 
-            message.setFrom(new InternetAddress(username));
+            message.setFrom(new InternetAddress("support@quantumcomputers.com"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailParts.getRecipient()));
             message.setSubject(mailParts.getSubject());
             message.setText(mailParts.getBody());
