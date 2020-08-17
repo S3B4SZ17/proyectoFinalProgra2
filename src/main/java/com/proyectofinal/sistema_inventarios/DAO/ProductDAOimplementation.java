@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProductDAOimplementation implements ProductRepo {
     @Autowired
@@ -27,9 +28,10 @@ public class ProductDAOimplementation implements ProductRepo {
 
     @Override
     public int save(Product product) {
+        int consecutivoProducto = getConsecutivoProducto()+1;
         String sql = "Insert into Products (idProducts,name,quantity,price, description,datePurchase)"
                 + " values (?,?,?,?,?,?)";
-        return jdbcTemplate.update(sql, product.getIdProducts(), product.getName(), product.getQuantity(),product.getPrice(), product.getDescription(), product.getDateOfPurchase());
+        return jdbcTemplate.update(sql, consecutivoProducto, product.getName(), product.getQuantity(),product.getPrice(), product.getDescription(), product.getDateOfPurchase());
 
     }
 
@@ -91,5 +93,20 @@ public class ProductDAOimplementation implements ProductRepo {
 
         };
         return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    public int getConsecutivoProducto(){
+        String sql = "SELECT MAX(idProducts) as idProducto FROM Products";
+        AtomicInteger consecutivo = new AtomicInteger();
+        ResultSetExtractor<Integer> extractor = (ResultSet resultSet) ->  {
+            if (resultSet.next()) {
+                int numeroFactura = resultSet.getInt("idProducto");
+                consecutivo.set(numeroFactura);
+            }
+            return null;
+        };
+        jdbcTemplate.query(sql, extractor);
+        return consecutivo.intValue();
+
     }
 }

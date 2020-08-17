@@ -23,9 +23,9 @@ public class MainTest {
         Date date = new Date();
         LocalDateTime localDateTime = LocalDateTime.now();
         SpringJdbcConfig springJdbcConfig = new SpringJdbcConfig();
-        UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.mysqlDataSource());
-        InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.mysqlDataSource());
-        ProductRepo productRepo = new ProductDAOimplementation(springJdbcConfig.mysqlDataSource());
+        UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
+        InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
+        ProductRepo productRepo = new ProductDAOimplementation(springJdbcConfig.postgresqlDataSource());
 
 
         Invoices invoices = new Invoices();

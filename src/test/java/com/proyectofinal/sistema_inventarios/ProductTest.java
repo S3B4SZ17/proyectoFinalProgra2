@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,7 +25,7 @@ public class ProductTest {
 
     @BeforeEach
     public void setConnectionDataBase(){
-        productRepo = new ProductDAOimplementation(springJdbcConfig.mysqlDataSource());
+        productRepo = new ProductDAOimplementation(springJdbcConfig.postgresqlDataSource());
     }
 
     @Test

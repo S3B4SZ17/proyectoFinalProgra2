@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 @ComponentScan("com.proyectofinal.sistema_inventarios")
 public class SpringJdbcConfig {
     @Bean
-    public DataSource mysqlDataSource() {
+    public DataSource postgresqlDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/inventarios");

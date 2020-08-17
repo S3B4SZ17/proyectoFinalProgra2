@@ -25,7 +25,7 @@ public class UserTest {
     @BeforeEach
     public void setConnectionDataBase(){
 
-        userRepo = new UserDAOimplementation(springJdbcConfig.mysqlDataSource());
+        userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class UserTest {
     @Test
     public void testUpdateUser() throws SQLException {
         try {
-            Users users = new Users(1234567893,"Sebas", "Zumbado","60024846", FormaPago.Contado,"Sebas111", "sebas@example.com");
+            Users users = new Users(1234567891,"Sebas", "Zumbado","60024846", FormaPago.Debito,"Sebas111", "sebas@example.com");
             int result = userRepo.update(users, 1234567891);
 
             assertTrue(result >= 0);

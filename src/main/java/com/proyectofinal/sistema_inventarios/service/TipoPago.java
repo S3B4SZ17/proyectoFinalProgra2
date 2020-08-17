@@ -12,7 +12,7 @@ import java.util.Date;
 public class TipoPago {
     private FormaPago tipo;
     private int numeroTarjeta;
-    private Date fechaExpiracion;
+    private String fechaExpiracion;
     private String CVV;
 
 

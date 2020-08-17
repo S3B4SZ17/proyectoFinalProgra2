@@ -41,7 +41,7 @@ public class UserDAOimplementation implements UserRepo{
 
     @Override
     public Users getUser(int id) {
-        String sql = "SELECT * FROM Users WHERE cedula =" + id;
+        String sql = "SELECT * FROM Users WHERE cedula = " + id;
 
         ResultSetExtractor<Users> extractor = new ResultSetExtractor<Users>() {
             @Override

@@ -2,9 +2,7 @@ package com.proyectofinal.sistema_inventarios;
 
 import com.proyectofinal.sistema_inventarios.Config.SpringJdbcConfig;
 import com.proyectofinal.sistema_inventarios.DAO.InvoiceImplementation;
-import com.proyectofinal.sistema_inventarios.DAO.ProductDAOimplementation;
 import com.proyectofinal.sistema_inventarios.repository.InvoiceRepo;
-import com.proyectofinal.sistema_inventarios.repository.ProductRepo;
 import com.proyectofinal.sistema_inventarios.service.Invoices;
 import com.proyectofinal.sistema_inventarios.service.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class TestInvoice {
     LocalDateTime date = LocalDateTime.now();
@@ -22,7 +19,7 @@ public class TestInvoice {
 
     @BeforeEach
     public void setConnectionDataBase(){
-        invoiceRepo = new InvoiceImplementation(springJdbcConfig.mysqlDataSource());
+        invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
     }
 
     @Test

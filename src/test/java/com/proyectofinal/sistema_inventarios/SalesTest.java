@@ -14,7 +14,7 @@ public class SalesTest {
 
     @BeforeEach
     public void setConnectionDataBase(){
-        salesRepo = new SalesImplementation(springJdbcConfig.mysqlDataSource());
+        salesRepo = new SalesImplementation(springJdbcConfig.postgresqlDataSource());
     }
 
     @Test
