@@ -37,9 +37,9 @@ public class SalesImplementation implements SalesRepo {
                 if (resultSet.next()) {
                     double quantity = resultSet.getDouble("quantity");
                     String product = resultSet.getString("name");
-                    if (quantity>=15){
+                    if (quantity>=20){
                         result.set(quantity);
-                    }else if(quantity<15 && quantity>0){
+                    }else if(quantity<20 && quantity>0){
                         result.set(1.0);
                         enviarAlertaMinimodeStock(product,quantity);
                     }else{
@@ -64,7 +64,7 @@ public class SalesImplementation implements SalesRepo {
         String SubjectEmail = "Alerta de Minimo Stock ";
         String BodyEmail = "Le recomendamos compar mas articulos de : " +product+"\n"+
                 "Solamente se tienen "+quantity+ "Kg en stock";
-        mailService.sendEmail(new MailParts(SubjectEmail,"sebas@test.com",BodyEmail));
+        mailService.sendEmail(new MailParts(SubjectEmail,"administrator@test.com",BodyEmail));
 
     }
 

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class Product {
     private int idProducts;
     private String name;
-    private double price;
     private double quantity;
+    private double price;
     private String description;
     private LocalDateTime dateOfPurchase;
 

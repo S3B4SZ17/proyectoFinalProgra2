@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class Invoices {
     private int idFactura;
     private Users users;
-    private Product[] products;
+    private List<Product> products;
     private LocalDateTime invoiceDate;
     private double total;
 

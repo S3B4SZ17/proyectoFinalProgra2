@@ -31,7 +31,7 @@ public class MainTest {
         Invoices invoices = new Invoices();
         invoices.setUsers(userRepo.getUser(1234567892));
         invoices.setInvoiceDate(LocalDateTime.now());
-        invoices.setProducts(new Product[]{productRepo.getProduct(1001)});
+        //invoices.setProducts(new Product[]{productRepo.getProduct(1001)});
         invoices.setTotal(1500);
         invoiceRepo.subirFactura(invoices);
 

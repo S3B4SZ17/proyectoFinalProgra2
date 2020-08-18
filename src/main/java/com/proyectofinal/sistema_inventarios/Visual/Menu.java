@@ -9,12 +9,14 @@ import com.proyectofinal.sistema_inventarios.service.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.EventListener;
 
-public class Menu {
+public class Menu extends JFrame{
     @Autowired
     private static SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
     private static UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
@@ -23,42 +25,80 @@ public class Menu {
     private static TipoPagoRepo tipoPagoRepo= new TipoPagoImplementacion(springJdbcConfig.postgresqlDataSource());
     private static InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
 
+
     public static void main(String[] args) {
         int opcionMenu = 0;
         int segundomenu = 0;
 
-        iniciarSesion();
+        //iniciarSesion();
+        mostrarMenu();
 
     }
 
     private static void iniciarSesion(){
         int intentos=0;
         boolean seguir = true;
+        JPasswordField passwordField = new JPasswordField();
+        Object[] sesion = {"Ingrese la contrasena", passwordField};
         do {
             try {
                 int usuario = Integer.parseInt(JOptionPane.showInputDialog(
                         "************* INICIO SESION Quantum Electronics ***************\n" +
                                 "	   Digite su cedula de Usuario\n"));
-                String contrasena = JOptionPane.showInputDialog(
-                        "************* MENU Quantum Electronics ***************\n" +
-                                "	Digite su contrasena\n");
+                JOptionPane.showConfirmDialog(null,sesion,"************* MENU Quantum Electronics ***************\n" +
+                        "	Digite su contrasena\n",JOptionPane.OK_OPTION);
                 Users users = userRepo.getUser(usuario);
-                if(usuario == users.getCedula() && contrasena.equals(users.getContrasena())){
+                if(usuario == users.getCedula() && passwordField.getText().equals(users.getContrasena())){
                     seguir = false;
                 }else{
                     intentos++;
                     JOptionPane.showMessageDialog(null, "Credenciales Invalidas, intente de nuevo");
-
+                    passwordField.setText("");
+                    if (intentos==3){
+                        System.exit(0);
+                    }
                 }
             }catch (Exception e){
-                if (intentos==3){
-                    System.exit(0);
-                }
+
                 JOptionPane.showMessageDialog(null, "Credenciales Invalidas, intente de nuevo");
             }
         }while (seguir);
         JOptionPane.showMessageDialog(null, "Validado!!");
         mostrarMenu();
+
+    }
+
+    private static void seleccionarProductos(){
+        DefaultTableModel model = new DefaultTableModel();
+        JFrame frame = new JFrame("Lista Productos");
+        JPanel panel = new JPanel();
+
+        JTextField producto = new JTextField();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JTable table = new JTable(model);
+        JButton buscar = new JButton("Presione para buscar el producto");
+        model.addColumn("ID");
+        model.addColumn("Nombre");
+        model.addColumn("Cantidad");
+        model.addColumn("Precio");
+        panel.add("Ingrese el nombre del producto",producto);
+        panel.add(buscar);
+        panel.add(table);
+        frame.add(panel);
+        table.setVisible(true);
+        //frame.add(new JScrollPane(table));
+        frame.setSize(500,600);
+        frame.setVisible(true);
+
+        buscar.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                Product[] products = {productRepo.getProduct(Integer.parseInt(producto.getText()))};
+                model.addRow(products);
+            }
+        });
+        /*Object[] buscarProducto = {"Ingrese el nombre del producto que desea buscar",nombre, "Ingrese la cantida de producto que desea comprar :", cantidad,
+                "Tabla de resultados",table, buscar};*/
+        // JOptionPane.showConfirmDialog(null,buscarProducto,"Ingrese los productos que desea agregar a su orden",JOptionPane.OK_OPTION);
 
     }
 
@@ -81,6 +121,7 @@ public class Menu {
                     break;
                 case 3:
                     //introducirFormaPago();
+                    seleccionarProductos();
                     realizarVenta();
                     break;
                 case 4:
@@ -99,7 +140,11 @@ public class Menu {
         JTable table = new JTable();
         JFrame frame = new JFrame("Lista Productos");
         frame.add(table);
+        frame.add(cantidad);
+        frame.setLayout(null);
+        frame.setSize(500,600);
         table.setVisible(true);
+
         JButton buscar = new JButton("Presione para buscar el producto");
 
         buscar.addActionListener(new ActionListener(){
@@ -109,7 +154,7 @@ public class Menu {
         });
         Object[] buscarProducto = {"Ingrese el nombre del producto que desea buscar",nombre, "Ingrese la cantida de producto que desea comprar :", cantidad,
                 "Tabla de resultados",table, buscar};
-        JOptionPane.showConfirmDialog(null,buscarProducto,"Ingrese los productos que desea agregar a su orden",JOptionPane.OK_OPTION);
+       // JOptionPane.showConfirmDialog(null,buscarProducto,"Ingrese los productos que desea agregar a su orden",JOptionPane.OK_OPTION);
 
     }
 

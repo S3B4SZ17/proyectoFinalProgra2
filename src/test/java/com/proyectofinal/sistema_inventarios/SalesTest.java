@@ -19,7 +19,7 @@ public class SalesTest {
 
     @Test
     public void testValidation(){
-        double res = salesRepo.validarExistencias(1002);
+        double res = salesRepo.validarExistencias(1003);
         System.out.println(res);
     }
 }
