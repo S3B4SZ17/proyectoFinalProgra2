@@ -1,6 +1,9 @@
 package com.proyectofinal.sistema_inventarios.DAO;
 
+import com.proyectofinal.sistema_inventarios.Config.SpringJdbcConfig;
 import com.proyectofinal.sistema_inventarios.repository.InvoiceRepo;
+import com.proyectofinal.sistema_inventarios.repository.ProductRepo;
+import com.proyectofinal.sistema_inventarios.repository.UserRepo;
 import com.proyectofinal.sistema_inventarios.service.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,9 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +32,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class InvoiceImplementation implements InvoiceRepo {
 
     private JdbcTemplate jdbcTemplate;
+    private SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
+    private UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
+    private ProductRepo productRepo = new ProductDAOimplementation(springJdbcConfig.postgresqlDataSource());
+    List<Product> listaProductos = new LinkedList<>();
 
     public InvoiceImplementation(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -31,17 +43,12 @@ public class InvoiceImplementation implements InvoiceRepo {
 
     private final String SubjectEmail = "Confirmacion de Factura numero ";
     private final String BodyEmail = "Gracias por realizar su compra con Quantum Electronics\n"+
-                                        "Adjunto encontrara el archivo en fromato  PDF";
-    private MailService mailService;
+                                     "Adjunto encontrara el archivo en fromato  TXT";
+    private MailService mailService = new MailService();
 
     @Override
     public void enviarCorreo(Invoices invoices) {
         mailService.sendEmail(new MailParts(SubjectEmail+invoices.getIdFactura(),invoices.getUsers().getEmail(),BodyEmail));
-    }
-
-    @Override
-    public Product getProducts(int id) {
-        return null;
     }
 
     @Override
@@ -68,14 +75,56 @@ public class InvoiceImplementation implements InvoiceRepo {
     }
 
     @Override
-    public Invoices getFactura(int id) {
-        return null;
+    public List<Invoices> getFactura(int id) {
+        
+        String sql = "Select f.idFactura, f.cedulaUsuario, f.invoiceDate, P.name, SUM(DP.totalLinea) as TotalFinal from Facturas f\n" +
+                    "    inner join DetalleProductos DP on f.idFactura = DP.idFactura INNER JOIN Products P on DP.idProducto = P.idProducts\n" +
+                    "GROUP BY f.idFactura, f.cedulaUsuario, f.invoiceDate, P.name\n" +
+                    "HAVING f.idFactura =" + id;
+
+         RowMapper<Invoices> rowMapper = new RowMapper<Invoices>() {
+            @Override
+//this method extracts via spring the data from the table contact and set it in the extractor variable
+            public Invoices mapRow(ResultSet resultSet, int i) throws SQLException, DataAccessException {
+                
+                    
+                    int idProducts = resultSet.getInt("idFactura");
+                    int cedula = resultSet.getInt("cedulausuario");
+                    String nombre = resultSet.getString("name");
+                    Double total = resultSet.getDouble("TotalFinal");
+                    LocalDateTime fechafactura = resultSet.getTimestamp("invoicedate").toLocalDateTime();
+                    listaProductos.add(productRepo.getProduct(0,nombre));
+                    return new Invoices(idProducts, userRepo.getUser(cedula), listaProductos,fechafactura,total );
+                
+                
+            }
+        };
+
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
-    public Users getUser(int cedula) {
-        return null;
+    public List<Invoices> list() {
+        String sql = "SELECT * FROM Facturas";
+        RowMapper<Invoices> rowMapper = new RowMapper<Invoices>() {//Row Mapper class, it returns a List of the Class that we specified
+            @Override
+            public Invoices mapRow(ResultSet resultSet, int i) throws SQLException {
+
+                int idProducts = resultSet.getInt("idFactura");
+                int cedula = resultSet.getInt("cedulausuario");
+                double total = resultSet.getDouble("total");
+                LocalDateTime datePurchase = resultSet.getTimestamp("invoicedate").toLocalDateTime();
+
+                return new Invoices(idProducts, userRepo.getUser(cedula), datePurchase, total);
+            }
+
+        };
+        return jdbcTemplate.query(sql, rowMapper);
+        
+    
     }
+
+    
 
     @Override
     public double getTotal(int id) {

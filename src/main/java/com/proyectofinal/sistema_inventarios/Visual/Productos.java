@@ -198,7 +198,7 @@ public class Productos extends javax.swing.JFrame {
             double quantity = salesRepo.validarExistencias((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0));
             Product product= new Product();
             double cantidadaComprar = Double.parseDouble(cantidad.getText());
-            product = productRepo.getProduct((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0));
+            product = productRepo.getProduct((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0),table.getModel().getValueAt(table.getSelectedRow(), 1).toString());
             System.out.println(product.toString());
             
             if(quantity!=1.0){

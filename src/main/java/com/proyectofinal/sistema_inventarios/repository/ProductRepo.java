@@ -9,7 +9,7 @@ public interface ProductRepo {
 
     public int  save(Product user);
     public int  update(Product user, int id);
-    public Product getProduct(int id);
+    public Product getProduct(int id, String nombreproducto);
     public int  delete(int id);
     public List<Product> list();
 }

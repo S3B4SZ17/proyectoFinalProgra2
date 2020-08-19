@@ -69,33 +69,7 @@ public class Menu extends JFrame{
     }
 
     private static void seleccionarProductos(){
-        DefaultTableModel model = new DefaultTableModel();
-        JFrame frame = new JFrame("Lista Productos");
-        JPanel panel = new JPanel();
-
-        JTextField producto = new JTextField();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JTable table = new JTable(model);
-        JButton buscar = new JButton("Presione para buscar el producto");
-        model.addColumn("ID");
-        model.addColumn("Nombre");
-        model.addColumn("Cantidad");
-        model.addColumn("Precio");
-        panel.add("Ingrese el nombre del producto",producto);
-        panel.add(buscar);
-        panel.add(table);
-        frame.add(panel);
-        table.setVisible(true);
-        //frame.add(new JScrollPane(table));
-        frame.setSize(500,600);
-        frame.setVisible(true);
-
-        buscar.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                Product[] products = {productRepo.getProduct(Integer.parseInt(producto.getText()))};
-                model.addRow(products);
-            }
-        });
+       
         /*Object[] buscarProducto = {"Ingrese el nombre del producto que desea buscar",nombre, "Ingrese la cantida de producto que desea comprar :", cantidad,
                 "Tabla de resultados",table, buscar};*/
         // JOptionPane.showConfirmDialog(null,buscarProducto,"Ingrese los productos que desea agregar a su orden",JOptionPane.OK_OPTION);

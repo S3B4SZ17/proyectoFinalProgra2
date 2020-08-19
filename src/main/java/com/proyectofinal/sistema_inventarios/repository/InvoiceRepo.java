@@ -5,15 +5,15 @@ import com.proyectofinal.sistema_inventarios.service.Product;
 import com.proyectofinal.sistema_inventarios.service.Users;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public interface InvoiceRepo {
-    public Product getProducts(int id);
-    public Users getUser(int cedula);
+    public List<Invoices> list();
     public double getTotal(int id);
     public int subirFactura(Invoices invoices);
     public void subirDetalleFactura(LinkedList<Product> products);
     public void enviarCorreo(Invoices invoices);
-    public Invoices getFactura(int id);
+    public List<Invoices> getFactura(int id);
 
 
 

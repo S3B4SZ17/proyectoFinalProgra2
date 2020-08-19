@@ -27,7 +27,7 @@ public class TestInvoice {
         Invoices invoices = new Invoices();
         //invoices.setUsers(new UserTest().testGetUser());
         invoices.setInvoiceDate(date);
-        invoices.setProducts(new Product[]{new Product(1005, "leche", 600, 15, "Descremada", LocalDateTime.now())});
+        //invoices.setProducts(new Product[]{new Product(1005, "leche", 600, 15, "Descremada", LocalDateTime.now())});
         invoiceRepo.subirFactura(invoices);
 
     }

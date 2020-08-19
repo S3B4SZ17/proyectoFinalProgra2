@@ -45,7 +45,7 @@ public class ProductTest {
     }
     @Test
     public void testGetProduct(){
-        Product product = productRepo.getProduct(1002 );
+        Product product = productRepo.getProduct(1002,"Arroz" );
         if(product !=null)System.out.println(product.toString());
     }
 

@@ -43,8 +43,8 @@ public class ProductDAOimplementation implements ProductRepo {
     }
 
     @Override
-    public Product getProduct(int id) {
-        String sql = "SELECT * FROM Products WHERE idProducts =" + id;
+    public Product getProduct(int id, String nombreproducto) {
+        String sql = "SELECT * FROM Products WHERE idProducts =" + id + " or name = " + "'"+nombreproducto+"'";
 
         ResultSetExtractor<Product> extractor = new ResultSetExtractor<Product>() {
             @Override

@@ -4,7 +4,17 @@
  * and open the template in the editor.
  */
 package com.proyectofinal.sistema_inventarios.Visual;
+import com.proyectofinal.sistema_inventarios.Config.SpringJdbcConfig;
+import com.proyectofinal.sistema_inventarios.DAO.ProductDAOimplementation;
+import com.proyectofinal.sistema_inventarios.DAO.UserDAOimplementation;
+import com.proyectofinal.sistema_inventarios.repository.ProductRepo;
+import com.proyectofinal.sistema_inventarios.repository.UserRepo;
+import com.proyectofinal.sistema_inventarios.service.Product;
 import com.proyectofinal.sistema_inventarios.service.Users;
+import java.time.LocalDateTime;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -15,6 +25,9 @@ public class Menu1 extends javax.swing.JFrame {
     /**
      * Creates new form Menu1
      */
+    @Autowired
+    private static SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
+    private static ProductRepo productRepo = new ProductDAOimplementation(springJdbcConfig.postgresqlDataSource());
     Users user =new Users();
     
     public Menu1() {
@@ -41,7 +54,7 @@ public class Menu1 extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        menu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Realizar Compras", "Realizar Venta", "Generar Factura", "Salir" }));
+        menu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Realizar Compras", "Ingresar Productos", "Modificar Inventarios", "Salir" }));
         menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuActionPerformed(evt);
@@ -88,8 +101,12 @@ public class Menu1 extends javax.swing.JFrame {
                 dispose();
                 break;
             case 1:
+                realizarCompra();
                 break;
             case 2:
+                GenerarFactura generarFactura = new GenerarFactura();
+                generarFactura.setVisible(true);
+                dispose();
                 break;
             case 3:
                 System.exit(0);
@@ -99,6 +116,39 @@ public class Menu1 extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_menuActionPerformed
 
+    
+     private void realizarCompra() {
+        Product product = new Product();
+        JTextField nombre = new JTextField();
+        JTextField cantidad = new JTextField();
+        JTextField precio = new JTextField();
+        JTextField descripcion = new JTextField();
+        Object[] ingresoProducto = {"* Ingrese el nombre del producto",nombre, "* Ingrese la cantidad de producto",cantidad,
+                "* Ingrese el precio del producto",precio,"Ingrese una breve descripcion del producto",descripcion};
+
+        boolean seguir = true;
+        do{
+            JOptionPane.showConfirmDialog(null,ingresoProducto,"Ingrese la informacion para agregar un nuevo producto",JOptionPane.OK_OPTION);
+            if(nombre.getText().equals("") || cantidad.getText().equals("")|| precio.getText().equals("")){
+                JOptionPane.showMessageDialog(null, "Debe ingresar un valor en todos los espacios requeridos **");
+            }else{
+                seguir=false;
+            }
+        }while(seguir);
+
+        product.setName(nombre.getText());
+        product.setQuantity(Integer.parseInt(cantidad.getText()));
+        product.setPrice(Double.parseDouble(precio.getText()));
+        product.setDescription(descripcion.getText());
+        product.setDateOfPurchase(LocalDateTime.now());
+        try{
+            productRepo.save(product);
+            JOptionPane.showMessageDialog(null, "Producto ingresado Correctamente");
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Error al ingresar el producto");
+        }
+    }
     /**
      * @param args the command line arguments
      */

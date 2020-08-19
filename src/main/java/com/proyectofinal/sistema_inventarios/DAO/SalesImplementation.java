@@ -31,7 +31,7 @@ public class SalesImplementation implements SalesRepo {
 
     @Override
     public double validarExistencias(int id) {
-        String sql = "SELECT quantity,name FROM Products WHERE idProducts =" + id;
+        String sql = "SELECT quantity,name FROM Products WHERE idProducts = " + id;
         AtomicReference<Double> result = new AtomicReference<Double>();
         ResultSetExtractor<Integer> extractor = (ResultSet resultSet) ->  {
                 if (resultSet.next()) {

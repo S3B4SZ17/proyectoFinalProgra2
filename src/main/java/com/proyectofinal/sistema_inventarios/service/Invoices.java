@@ -18,5 +18,11 @@ public class Invoices {
     private LocalDateTime invoiceDate;
     private double total;
 
-
+    public Invoices(int idFactura, Users users, LocalDateTime invoiceDate, double total) {
+        this.idFactura = idFactura;
+        this.users = users;
+        this.invoiceDate = invoiceDate;
+        this.total = total;
+    }
+   
 }

@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.EventListener;
 import com.proyectofinal.sistema_inventarios.service.Users;
+import java.io.FileWriter;
 import java.util.LinkedList;
 
 /**
@@ -42,13 +43,14 @@ public class Factura extends javax.swing.JFrame {
      * Creates new form Factura
      */
     @Autowired
-    private static SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
-    private static UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
-    private static ProductRepo productRepo = new ProductDAOimplementation(springJdbcConfig.postgresqlDataSource());
-    private static SalesRepo salesRepo = new SalesImplementation(springJdbcConfig.postgresqlDataSource());
-    private static TipoPagoRepo tipoPagoRepo= new TipoPagoImplementacion(springJdbcConfig.postgresqlDataSource());
-    private static InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
+    private SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
+    private UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
+    private ProductRepo productRepo = new ProductDAOimplementation(springJdbcConfig.postgresqlDataSource());
+    private SalesRepo salesRepo = new SalesImplementation(springJdbcConfig.postgresqlDataSource());
+    private TipoPagoRepo tipoPagoRepo= new TipoPagoImplementacion(springJdbcConfig.postgresqlDataSource());
+    private InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
     Users user = new Users();
+    FileWriter fileWriter;
     List<Product> products = new LinkedList<>();
     
     public Factura() {
@@ -78,6 +80,7 @@ public class Factura extends javax.swing.JFrame {
         table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,18 +108,30 @@ public class Factura extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Volver al Menu");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(336, 336, 336)
+                        .addComponent(jButton3)))
                 .addContainerGap(47, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -124,11 +139,13 @@ public class Factura extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addGap(46, 46, 46))
+                .addGap(11, 11, 11)
+                .addComponent(jButton3)
+                .addContainerGap())
         );
 
         pack();
@@ -177,8 +194,14 @@ public class Factura extends javax.swing.JFrame {
         invoiceRepo.subirDetalleFactura((LinkedList<Product>)products);
         
         
-        
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        Menu1 menu = new Menu1(user);
+                menu.setVisible(true);
+                dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void llenarTablaFactura(List<Product> products){
         DefaultTableModel model = (DefaultTableModel) table.getModel(); 
@@ -194,6 +217,8 @@ public class Factura extends javax.swing.JFrame {
         }   
        
     }
+    
+    
     
     /**
      * @param args the command line arguments
@@ -233,6 +258,7 @@ public class Factura extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
