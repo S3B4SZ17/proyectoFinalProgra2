@@ -1,7 +1,12 @@
 package com.proyectofinal.sistema_inventarios.DAO;
 
+import com.proyectofinal.sistema_inventarios.Config.SpringJdbcConfig;
 import com.proyectofinal.sistema_inventarios.repository.TipoPagoRepo;
+import com.proyectofinal.sistema_inventarios.repository.UserRepo;
+import com.proyectofinal.sistema_inventarios.service.FormaPago;
+import com.proyectofinal.sistema_inventarios.service.Product;
 import com.proyectofinal.sistema_inventarios.service.TipoPago;
+import com.proyectofinal.sistema_inventarios.service.Users;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import javax.swing.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.dao.DataAccessException;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Transactional
 public class TipoPagoImplementacion implements TipoPagoRepo {
     private JdbcTemplate jdbcTemplate;
+    private static SpringJdbcConfig springJdbcConfig =new SpringJdbcConfig();
+    private static UserRepo userRepo = new UserDAOimplementation(springJdbcConfig.postgresqlDataSource());
 
 
     public TipoPagoImplementacion(DataSource dataSource) {
@@ -57,11 +67,39 @@ public class TipoPagoImplementacion implements TipoPagoRepo {
     @Override
     public int ingresarInfoTarjeta(TipoPago tipoPago) {
         if(validarTarjeta(tipoPago.getNumeroTarjeta(),tipoPago.getFechaExpiracion(),tipoPago.getCVV())==1){
-            String sql = "Insert into Tarjetas (numeroTarjeta,tipo,fechaExpiracion, CVV)"
-                    + " values (?,?,?,?)";
-            return jdbcTemplate.update(sql,tipoPago.getNumeroTarjeta(),tipoPago.getTipo().toString(),tipoPago.getFechaExpiracion(),tipoPago.getCVV());
+            String sql = "Insert into Tarjetas (numeroTarjeta,tipo,fechaExpiracion, CVV,cedulaUsuario)"
+                    + " values (?,?,?,?,?)";
+            return jdbcTemplate.update(sql,tipoPago.getNumeroTarjeta(),tipoPago.getTipo().toString(),tipoPago.getFechaExpiracion(),tipoPago.getCVV(),tipoPago.getUser().getCedula());
 
         }
        return 0;
     }
+
+    @Override
+    public TipoPago getTarjeta(int numero) {
+        String sql = "SELECT * FROM Tarjetas WHERE numeroTarjeta = " +numero;
+
+        ResultSetExtractor<TipoPago> extractor = new ResultSetExtractor<TipoPago>() {
+            @Override
+//this method extracts via spring the data from the table contact and set it in the extractor variable
+            public TipoPago extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                if (resultSet.next()) {
+                    String tipo = resultSet.getString("tipo");
+                    int numeroTarjeta = resultSet.getInt("numeroTarjeta");
+                    String cvv = resultSet.getString("CVV");
+                    int usuario = resultSet.getInt("cedulaUsuario");
+                    String fechaEx = resultSet.getString("fechaExpiracion");
+
+                    return new TipoPago(FormaPago.valueOf(tipo), numeroTarjeta, fechaEx,cvv, userRepo.getUser(usuario));
+                }
+                return null;
+            }
+        };
+
+        return jdbcTemplate.query(sql, extractor);
+    
+    
+    }
+    
+    
 }

@@ -14,6 +14,7 @@ public class TipoPago {
     private int numeroTarjeta;
     private String fechaExpiracion;
     private String CVV;
+    private Users user;
 
 
 }

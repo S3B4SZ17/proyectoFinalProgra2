@@ -57,7 +57,7 @@
           <StringArray count="4">
             <StringItem index="0" value="Realizar Compras"/>
             <StringItem index="1" value="Ingresar Productos"/>
-            <StringItem index="2" value="Modificar Inventarios"/>
+            <StringItem index="2" value="Ver Facturas"/>
             <StringItem index="3" value="Salir"/>
           </StringArray>
         </Property>

@@ -54,7 +54,7 @@ public class Menu1 extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        menu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Realizar Compras", "Ingresar Productos", "Modificar Inventarios", "Salir" }));
+        menu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Realizar Compras", "Ingresar Productos", "Ver Facturas", "Salir" }));
         menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuActionPerformed(evt);
@@ -101,7 +101,7 @@ public class Menu1 extends javax.swing.JFrame {
                 dispose();
                 break;
             case 1:
-                realizarCompra();
+                ingresarProducto();
                 break;
             case 2:
                 GenerarFactura generarFactura = new GenerarFactura();
@@ -117,7 +117,7 @@ public class Menu1 extends javax.swing.JFrame {
     }//GEN-LAST:event_menuActionPerformed
 
     
-     private void realizarCompra() {
+     private void ingresarProducto() {
         Product product = new Product();
         JTextField nombre = new JTextField();
         JTextField cantidad = new JTextField();
@@ -125,12 +125,14 @@ public class Menu1 extends javax.swing.JFrame {
         JTextField descripcion = new JTextField();
         Object[] ingresoProducto = {"* Ingrese el nombre del producto",nombre, "* Ingrese la cantidad de producto",cantidad,
                 "* Ingrese el precio del producto",precio,"Ingrese una breve descripcion del producto",descripcion};
-
+        
         boolean seguir = true;
         do{
             JOptionPane.showConfirmDialog(null,ingresoProducto,"Ingrese la informacion para agregar un nuevo producto",JOptionPane.OK_OPTION);
             if(nombre.getText().equals("") || cantidad.getText().equals("")|| precio.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Debe ingresar un valor en todos los espacios requeridos **");
+               
+                
             }else{
                 seguir=false;
             }

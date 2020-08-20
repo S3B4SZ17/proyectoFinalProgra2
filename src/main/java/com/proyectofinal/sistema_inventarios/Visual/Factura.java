@@ -30,8 +30,10 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.EventListener;
 import com.proyectofinal.sistema_inventarios.service.Users;
+import java.awt.image.TileObserver;
 import java.io.FileWriter;
 import java.util.LinkedList;
+import org.aspectj.apache.bcel.generic.TABLESWITCH;
 
 /**
  *
@@ -51,6 +53,7 @@ public class Factura extends javax.swing.JFrame {
     private InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
     Users user = new Users();
     FileWriter fileWriter;
+    TipoPago tipoPago =  new TipoPago();
     List<Product> products = new LinkedList<>();
     
     public Factura() {
@@ -172,6 +175,7 @@ public class Factura extends javax.swing.JFrame {
 
             try{
                 if(tipoPagoRepo.validarTarjeta(Integer.parseInt(numero.getText()),fechaEx.getText(), cvv.getText())==1){
+                    this.tipoPago = tipoPagoRepo.getTarjeta(Integer.parseInt(numero.getText()));
                     jButton2.setEnabled(true);
                     seguir = false;
                 }else{
@@ -180,6 +184,10 @@ public class Factura extends javax.swing.JFrame {
                     }
                     JOptionPane.showMessageDialog(null, "Informacion ingresada invalida");
                     contador++;
+                    numero.setText("");
+                    fechaEx.setText("");
+                    cvv.setText("");
+                            
                 }
 
             }catch (Exception e){
@@ -193,12 +201,12 @@ public class Factura extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        GenerarFactura generarFactura = new GenerarFactura(user);
+        
         Invoices invoice = new Invoices();
         try{
             
         
-        invoice.setUsers(user);
+        invoice.setUsers(this.tipoPago.getUser());
         invoice.setProducts(products);
         invoice.setInvoiceDate(LocalDateTime.now());
         invoiceRepo.subirFactura(invoice);
@@ -206,13 +214,13 @@ public class Factura extends javax.swing.JFrame {
         restaInventario();
         
         
-        generarFactura.setVisible(true);
-        dispose();
         
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "Ya se ingreso la factura");
+            JOptionPane.showMessageDialog(null, "Error al ingresar la factura");
         }
-        
+        GenerarFactura generarFactura = new GenerarFactura(user);
+        generarFactura.setVisible(true);
+        dispose();
         
         
         
