@@ -1,9 +1,0 @@
-Factura-102
-
-
-Usuario : Mark Brown
-
-Product(idProducts=1001, name=Arroz, quantity=900.0, price=200.0, description=Arroz Pelon, dateOfPurchase=2020-08-16T13:09:16.641039)
-Product(idProducts=1002, name=Cereal, quantity=300.0, price=150.0, description=Cereal dulce, dateOfPurchase=2020-08-16T13:10:22.036535)
-2020-08-16T13:16:32.688256
-El total de la factura es : 180000.0

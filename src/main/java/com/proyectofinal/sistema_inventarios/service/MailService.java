@@ -1,5 +1,6 @@
 package com.proyectofinal.sistema_inventarios.service;
 
+import com.sun.mail.imap.ACL;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,11 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +45,6 @@ public class MailService {
 
         Message message = prepareMessage(session, mailParts);
         try {
-            System.out.println(message);
             Transport.send(message);
 
         } catch (MessagingException e) {
@@ -49,12 +54,21 @@ public class MailService {
 
     private Message prepareMessage(Session session, MailParts mailParts){
         Message message = new MimeMessage(session);
+        BodyPart body = new MimeBodyPart();
+        Multipart multipart = new MimeMultipart();
+        DataSource source = new FileDataSource(mailParts.getAttachment());
         try {
-
+            
             message.setFrom(new InternetAddress("support@quantumcomputers.com"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailParts.getRecipient()));
             message.setSubject(mailParts.getSubject());
             message.setText(mailParts.getBody());
+           
+            body.setDataHandler(new DataHandler(source));
+            body.setFileName(mailParts.getAttachment());
+              
+            multipart.addBodyPart(body);
+            message.setContent(multipart);
             System.out.println(message.getFrom().toString());
             return message;
 

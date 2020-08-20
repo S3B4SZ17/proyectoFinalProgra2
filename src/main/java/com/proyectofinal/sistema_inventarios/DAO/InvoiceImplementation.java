@@ -47,8 +47,8 @@ public class InvoiceImplementation implements InvoiceRepo {
     private MailService mailService = new MailService();
 
     @Override
-    public void enviarCorreo(Invoices invoices) {
-        mailService.sendEmail(new MailParts(SubjectEmail+invoices.getIdFactura(),invoices.getUsers().getEmail(),BodyEmail));
+    public void enviarCorreo(Invoices invoices, String fileName) {
+        mailService.sendEmail(new MailParts(SubjectEmail+invoices.getIdFactura(),invoices.getUsers().getEmail(),BodyEmail,fileName));
     }
 
     @Override
@@ -86,7 +86,6 @@ public class InvoiceImplementation implements InvoiceRepo {
             @Override
 //this method extracts via spring the data from the table contact and set it in the extractor variable
             public Invoices mapRow(ResultSet resultSet, int i) throws SQLException, DataAccessException {
-                
                     
                     int idProducts = resultSet.getInt("idFactura");
                     int cedula = resultSet.getInt("cedulausuario");

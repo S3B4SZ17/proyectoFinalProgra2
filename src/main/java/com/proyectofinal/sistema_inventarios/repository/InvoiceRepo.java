@@ -12,7 +12,7 @@ public interface InvoiceRepo {
     public double getTotal(int id);
     public int subirFactura(Invoices invoices);
     public void subirDetalleFactura(LinkedList<Product> products);
-    public void enviarCorreo(Invoices invoices);
+    public void enviarCorreo(Invoices invoices, String fileName);
     public List<Invoices> getFactura(int id);
 
 

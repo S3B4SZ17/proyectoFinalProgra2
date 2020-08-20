@@ -165,6 +165,7 @@ public class Factura extends javax.swing.JFrame {
         Object[] ingresoFormapago = {"* Ingrese el numero de tarjeta",numero, "* Ingrese la fecha de expiracion de la forma 'MM/YY'",fechaEx,
                 "* Ingrese el codigo de seguridad de la tarjeta",cvv,"Seleccione el tipo de tarjeta", tipoTarjeta};
         boolean seguir = true;
+        int contador = 0;
         
         do{
             JOptionPane.showConfirmDialog(null,ingresoFormapago,"Ingrese la informacion para agregar la forma de Pago",JOptionPane.OK_OPTION);
@@ -173,6 +174,12 @@ public class Factura extends javax.swing.JFrame {
                 if(tipoPagoRepo.validarTarjeta(Integer.parseInt(numero.getText()),fechaEx.getText(), cvv.getText())==1){
                     jButton2.setEnabled(true);
                     seguir = false;
+                }else{
+                    if(contador==3){
+                        seguir = false;
+                    }
+                    JOptionPane.showMessageDialog(null, "Informacion ingresada invalida");
+                    contador++;
                 }
 
             }catch (Exception e){
@@ -186,16 +193,53 @@ public class Factura extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        GenerarFactura generarFactura = new GenerarFactura(user);
         Invoices invoice = new Invoices();
+        try{
+            
+        
         invoice.setUsers(user);
         invoice.setProducts(products);
         invoice.setInvoiceDate(LocalDateTime.now());
         invoiceRepo.subirFactura(invoice);
         invoiceRepo.subirDetalleFactura((LinkedList<Product>)products);
+        restaInventario();
+        
+        
+        generarFactura.setVisible(true);
+        dispose();
+        
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Ya se ingreso la factura");
+        }
+        
+        
         
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void restaInventario(){
+        
+        Product product = new Product();
+        
+        
+        try{
+            
+           for(int i = 0;i< table.getModel().getRowCount();i++){
+           product = productRepo.getProduct(0,table.getModel().getValueAt(i, 0).toString()); 
+           double cantidad = product.getQuantity();
+           product.setQuantity(cantidad - Double.parseDouble(table.getModel().getValueAt(i, 1).toString()));
+           productRepo.update(product,product.getIdProducts());
+           }
+        
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Error al actualizar inventario");
+        }
+    
+    }
+    
+    
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         Menu1 menu = new Menu1(user);

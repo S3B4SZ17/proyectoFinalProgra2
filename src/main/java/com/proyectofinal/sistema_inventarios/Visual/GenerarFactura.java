@@ -16,6 +16,7 @@ import com.proyectofinal.sistema_inventarios.repository.SalesRepo;
 import com.proyectofinal.sistema_inventarios.repository.TipoPagoRepo;
 import com.proyectofinal.sistema_inventarios.service.Invoices;
 import com.proyectofinal.sistema_inventarios.service.Product;
+import com.proyectofinal.sistema_inventarios.service.Users;
 import static java.awt.image.ImageObserver.WIDTH;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,11 +45,20 @@ public class GenerarFactura extends javax.swing.JFrame {
     private TipoPagoRepo tipoPagoRepo= new TipoPagoImplementacion(springJdbcConfig.postgresqlDataSource());
     private InvoiceRepo invoiceRepo = new InvoiceImplementation(springJdbcConfig.postgresqlDataSource());
     private FileWriter fileWriter;
+    Users user = new Users();
     public GenerarFactura() {
         
         initComponents();
         llenarTablaProductos();
         setLocationRelativeTo(null);
+    }
+    
+    public GenerarFactura(Users user) {
+        
+        initComponents();
+        llenarTablaProductos();
+        setLocationRelativeTo(null);
+        this.user = user;
     }
 
     /**
@@ -65,6 +75,7 @@ public class GenerarFactura extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         idfactura = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,6 +98,13 @@ public class GenerarFactura extends javax.swing.JFrame {
 
         jLabel1.setText("Introduzca el ID de la factura y presione el boton para enviar un correo con la factura adjunta");
 
+        jButton2.setText("Menu");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,10 +116,16 @@ public class GenerarFactura extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(idfactura, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1))
-                .addContainerGap(37, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(idfactura, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addContainerGap(37, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(72, 72, 72))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +137,9 @@ public class GenerarFactura extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(idfactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addGap(21, 21, 21))
         );
 
@@ -124,6 +150,13 @@ public class GenerarFactura extends javax.swing.JFrame {
         // TODO add your handling code here:
         imprimirfactura();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Menu1 menu = new Menu1(user);
+                menu.setVisible(true);
+                dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     
     public void llenarTablaProductos(){
@@ -146,7 +179,8 @@ public class GenerarFactura extends javax.swing.JFrame {
     
     private void imprimirfactura(){
         List<Invoices> invoices= invoiceRepo.getFactura(Integer.parseInt(idfactura.getText()));
-        double total = 0;
+        double total = invoiceRepo.getTotal(Integer.parseInt(idfactura.getText()));
+        
         
          try {
             fileWriter = new FileWriter("Factura-"+idfactura.getText()+".txt");
@@ -155,14 +189,13 @@ public class GenerarFactura extends javax.swing.JFrame {
             fileWriter.write("Usuario : "+invoices.get(0).getUsers().getName()+" "+invoices.get(0).getUsers().getLastName()+"\n\n");
             for(int i = 0; i< invoices.size();i++){
                 fileWriter.write(invoices.get(i).getProducts().get(i).toString()+"\n");
-                total += invoices.get(i).getTotal();
             }
-            fileWriter.write(invoices.get(0).getInvoiceDate().toString()+"\n");
-            fileWriter.write("El total de la factura es : "+String.valueOf(invoices.get(0).getTotal()));
+            fileWriter.write("\n\nLa fecha de la factura es : "+invoices.get(0).getInvoiceDate().toString()+"\n\n");
+            fileWriter.write("El total de la factura es : "+total);
             
             fileWriter.close();
-            //invoiceRepo.enviarCorreo(invoices);
-            JOptionPane.showMessageDialog(null, "se ha enviado el correo electronico correctamente a "+invoices.get(0).getUsers().getEmail());
+            invoiceRepo.enviarCorreo(invoices.get(0),"Factura-"+idfactura.getText()+".txt");
+            JOptionPane.showMessageDialog(null, "Se ha enviado el correo electronico correctamente a "+invoices.get(0).getUsers().getEmail());
             
         } catch (IOException ex) {
             Logger.getLogger(Invoices.class.getName()).log(Level.SEVERE, null, ex);
@@ -210,6 +243,7 @@ public class GenerarFactura extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField idfactura;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
