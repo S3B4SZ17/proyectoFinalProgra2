@@ -192,6 +192,7 @@ public class GenerarFactura extends javax.swing.JFrame {
             }
             fileWriter.write("\n\nLa fecha de la factura es : "+invoices.get(0).getInvoiceDate().toString()+"\n\n");
             fileWriter.write("El total de la factura es : "+total);
+             fileWriter.write("\n\n\n***** Quantum Electronics *****"+total);
             
             fileWriter.close();
             invoiceRepo.enviarCorreo(invoices.get(0),"Factura-"+idfactura.getText()+".txt");

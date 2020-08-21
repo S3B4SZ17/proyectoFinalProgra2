@@ -51,6 +51,23 @@ public class MailService {
             e.printStackTrace();
         }
     }
+    
+    public void sendEmailMinimoStock(MailParts mailParts){
+        Session session = Session.getInstance(getProperties(), new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username,password);
+            }
+        });
+
+        Message message = minimoStock(session, mailParts);
+        try {
+            Transport.send(message);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 
     private Message prepareMessage(Session session, MailParts mailParts){
         Message message = new MimeMessage(session);
@@ -77,6 +94,26 @@ public class MailService {
         }
         return null;
     }
+    
+    private Message minimoStock(Session session, MailParts mailParts){
+        Message message = new MimeMessage(session);
+       
+        try {
+            
+            message.setFrom(new InternetAddress("support@quantumcomputers.com"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailParts.getRecipient()));
+            message.setSubject(mailParts.getSubject());
+            message.setText(mailParts.getBody());
+           
+            System.out.println(message.getFrom().toString());
+            return message;
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
 
 
 }

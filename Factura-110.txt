@@ -1,0 +1,12 @@
+Factura-110
+
+
+Usuario : Sebas Zumbado
+
+Product(idProducts=1001, name=Arroz, quantity=895.0, price=200.0, description=Arroz Pelon, dateOfPurchase=2020-08-16T13:09:16.641039)
+Product(idProducts=1003, name=Leche, quantity=19.0, price=45.0, description=Leche Descremada, dateOfPurchase=2020-08-16T21:16:14.107791)
+
+
+La fecha de la factura es : 2020-08-20T18:33:32.680485
+
+El total de la factura es : 1360.0

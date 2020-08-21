@@ -215,7 +215,7 @@ public class Productos extends javax.swing.JFrame {
                    
                 }
             }else{
-                JOptionPane.showMessageDialog(null, "No hay suficiente cantidad en inventarios");
+                JOptionPane.showMessageDialog(null, "Cantidad minimina en stock, se envio un correo al administrador para tener por lo menos 20 articulos");
             }
         }catch(Exception ex){
         

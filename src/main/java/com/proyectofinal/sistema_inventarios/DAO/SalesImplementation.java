@@ -64,7 +64,7 @@ public class SalesImplementation implements SalesRepo {
         String SubjectEmail = "Alerta de Minimo Stock ";
         String BodyEmail = "Le recomendamos compar mas articulos de : " +product+"\n"+
                 "Solamente se tienen "+quantity+ "Kg en stock";
-        mailService.sendEmail(new MailParts(SubjectEmail,"administrator@test.com",BodyEmail));
+        mailService.sendEmailMinimoStock(new MailParts(SubjectEmail,"administrator@test.com",BodyEmail));
 
     }
 
