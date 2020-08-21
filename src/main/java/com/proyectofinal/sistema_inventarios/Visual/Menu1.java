@@ -127,6 +127,8 @@ public class Menu1 extends javax.swing.JFrame {
                 "* Ingrese el precio del producto",precio,"Ingrese una breve descripcion del producto",descripcion};
         
         boolean seguir = true;
+        try{
+            
         do{
             JOptionPane.showConfirmDialog(null,ingresoProducto,"Ingrese la informacion para agregar un nuevo producto",JOptionPane.OK_OPTION);
             if(nombre.getText().equals("") || cantidad.getText().equals("")|| precio.getText().equals("")){
@@ -143,7 +145,7 @@ public class Menu1 extends javax.swing.JFrame {
         product.setPrice(Double.parseDouble(precio.getText()));
         product.setDescription(descripcion.getText());
         product.setDateOfPurchase(LocalDateTime.now());
-        try{
+        
             productRepo.save(product);
             JOptionPane.showMessageDialog(null, "Producto ingresado Correctamente");
 

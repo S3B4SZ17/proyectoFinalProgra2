@@ -1,0 +1,15 @@
+Factura-112
+
+
+Usuario : Mark Brown
+
+Product(idProducts=1001, name=Arroz, quantity=880.0, price=200.0, description=Arroz Pelon, dateOfPurchase=2020-08-16T13:09:16.641039)
+Product(idProducts=1006, name=Carnes, quantity=190.0, price=2750.0, description=Carnes rojas, dateOfPurchase=2020-08-20T21:56:02.860538)
+
+
+La fecha de la factura es : 2020-08-20T23:55:48.569035
+
+El total de la factura es : 29500.0
+
+
+***** Quantum Electronics *****29500.0

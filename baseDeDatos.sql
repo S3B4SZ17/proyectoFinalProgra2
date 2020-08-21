@@ -109,6 +109,8 @@ COPY public.detalleproductos (idfactura, idproducto, totallinea) FROM stdin;
 108	1004	3750
 109	1005	3250
 109	1004	2500
+110	1001	1000
+110	1003	360
 \.
 
 
@@ -126,6 +128,7 @@ COPY public.facturas (idfactura, cedulausuario, invoicedate, total) FROM stdin;
 107	1234567891	2020-08-19 22:20:30.517578	390
 108	1234567891	2020-08-19 22:47:57.93657	3975
 109	1234567891	2020-08-20 00:55:37.935621	5750
+110	1234567891	2020-08-20 18:33:32.680485	1360
 \.
 
 
@@ -134,11 +137,11 @@ COPY public.facturas (idfactura, cedulausuario, invoicedate, total) FROM stdin;
 --
 
 COPY public.products (idproducts, name, quantity, price, description, datepurchase) FROM stdin;
-1001	Arroz	900	200	Arroz Pelon	2020-08-16 13:09:16.641039
 1002	Cereal	290	150	Cereal dulce	2020-08-16 13:10:22.036535
-1003	Leche	27	45	Leche Descremada	2020-08-16 21:16:14.107791
 1005	Frijoles	145	650	Frijoles Rojos	2020-08-19 23:24:32.58649
 1004	Papas	115	1250	Papa amarilla	2020-08-17 21:20:09.077555
+1001	Arroz	895	200	Arroz Pelon	2020-08-16 13:09:16.641039
+1003	Leche	19	45	Leche Descremada	2020-08-16 21:16:14.107791
 \.
 
 
@@ -148,6 +151,7 @@ COPY public.products (idproducts, name, quantity, price, description, datepurcha
 
 COPY public.tarjetas (numerotarjeta, tipo, fechaexpiracion, cvv, cedulausuario) FROM stdin;
 1234567890	Debito	09/23	231	1234567891
+987654321	Credito	03/22	536	1234567892
 \.
 
 

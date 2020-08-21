@@ -178,11 +178,9 @@ public class GenerarFactura extends javax.swing.JFrame {
     }
     
     private void imprimirfactura(){
-        List<Invoices> invoices= invoiceRepo.getFactura(Integer.parseInt(idfactura.getText()));
-        double total = invoiceRepo.getTotal(Integer.parseInt(idfactura.getText()));
-        
-        
-         try {
+       try {
+             List<Invoices> invoices= invoiceRepo.getFactura(Integer.parseInt(idfactura.getText()));
+            double total = invoiceRepo.getTotal(Integer.parseInt(idfactura.getText()));
             fileWriter = new FileWriter("Factura-"+idfactura.getText()+".txt");
 
             fileWriter.write("Factura-"+invoices.get(0).getIdFactura()+"\n\n\n");
@@ -192,14 +190,14 @@ public class GenerarFactura extends javax.swing.JFrame {
             }
             fileWriter.write("\n\nLa fecha de la factura es : "+invoices.get(0).getInvoiceDate().toString()+"\n\n");
             fileWriter.write("El total de la factura es : "+total);
-             fileWriter.write("\n\n\n***** Quantum Electronics *****"+total);
+             fileWriter.write("\n\n\n***** Quantum Electronics *****");
             
             fileWriter.close();
             invoiceRepo.enviarCorreo(invoices.get(0),"Factura-"+idfactura.getText()+".txt");
             JOptionPane.showMessageDialog(null, "Se ha enviado el correo electronico correctamente a "+invoices.get(0).getUsers().getEmail());
             
-        } catch (IOException ex) {
-            Logger.getLogger(Invoices.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "El numero de factura ingresada no existe");
         }
         
     
