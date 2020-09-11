@@ -92,7 +92,7 @@ public class ProductDAOimplementation implements ProductRepo {
             }
 
         };
-        return jdbcTemplate.query(sql, rowMapper);
+            return jdbcTemplate.query(sql, rowMapper);
     }
 
     public int getConsecutivoProducto(){

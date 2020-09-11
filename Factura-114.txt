@@ -1,0 +1,15 @@
+Factura-114
+
+
+Usuario : Sebas Zumbado
+
+Product(idProducts=1001, name=Arroz, quantity=870.0, price=200.0, description=Arroz Pelon, dateOfPurchase=2020-08-16T13:09:16.641039)
+Product(idProducts=1005, name=Frijoles, quantity=130.0, price=650.0, description=Frijoles Rojos, dateOfPurchase=2020-08-19T23:24:32.586490)
+
+
+La fecha de la factura es : 2020-08-21T19:49:13.767098
+
+El total de la factura es : 11750.0
+
+
+***** Quantum Electronics *****

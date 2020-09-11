@@ -15,6 +15,4 @@ public class Users {
     private FormaPago tipoPago;
     private String contrasena;
     private String email;
-
-
 }
